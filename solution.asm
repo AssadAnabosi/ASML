@@ -3,6 +3,7 @@ dosseg
 .data
 numbers db 2 dup(0)
 op db ' '
+welcome_msg db 10, 13, 'Enter your first number followed by a space then an operator and lastly the second number, then press enter to calculate.', 10, 13, '$'
 invalid_input_msg db 10, 13, 'Invalid input', 10, 13, '$'
 remainder_msg db 10, 13, 'Remainder: ', 10, 13, '$'
 remainder db 0
