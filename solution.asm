@@ -3,7 +3,7 @@ dosseg
 .data
 numbers db 2 dup(0)
 op db ' '
-welcome_msg db 10, 13, 'Enter your first number followed by a space then an operator and lastly the second number, then press enter to calculate.', 10, 13, '$'
+welcome_msg db 10, 13, 'Enter your first number followed by a space then an operator', 10, 13, 'and lastly the second number, then press enter to calculate.', 10, 13, 'E.G: 5 + 5', 10, 13, '$'
 invalid_input_msg db 10, 13, 'Invalid input', 10, 13, '$'
 remainder_msg db 10, 13, 'Remainder: ', 10, 13, '$'
 remainder db 0
@@ -11,6 +11,10 @@ remainder db 0
 main:
 mov ax, @data
 mov ds, ax
+
+mov dx, offset welcome_msg
+mov ah, 9h
+int 21h
 
 mov si, offset numbers
 read_input:
