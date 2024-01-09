@@ -5,6 +5,7 @@ numbers db 2 dup(0)
 op db ' '
 welcome_msg db 10, 13, 'Enter your first number followed by a space before and after the operator', 10, 13, 'and lastly the second number, then press enter to calculate.', 10, 13, 'E.G: 5 + 5', 10, 13, '$'
 invalid_input_msg db 10, 13, 'Invalid input', 10, 13, '$'
+out_of_range_msg db 10, 13, 'Out of range', 10, 13, '$'
 remainder_msg db 10, 13, 'Remainder: ', 10, 13, '$'
 remainder db 0
 .code
@@ -29,12 +30,16 @@ jb invalid_input1
 cmp al, '9'
 ja invalid_input1
 ; storing multi digit numbers
+mov ah, 0
 sub al, '0'
 mov bl, al
 mov al, 10
 mov dl, [si]
 mul dl
+cmp ah, 0
+ja out_of_range1
 add al, bl
+jc out_of_range1
 mov [si], al
 jmp read_input
 
@@ -52,6 +57,9 @@ jmp read_input
 invalid_input1:
 jmp invalid_input
 
+out_of_range1:
+jmp out_of_range
+
 calculate:
 cmp op, '+'
 je add_numbers
@@ -67,6 +75,7 @@ add_numbers:
 mov dl, [si]
 dec si
 add dl, [si]
+jc out_of_range1
 jmp print
 
 subtract_numbers:
@@ -84,10 +93,13 @@ mov dl, cl
 jmp print
 
 multiply_numbers:
+mov ah, 0
 mov al, [si]
 dec si
 mov cl, [si]
 mul cl
+cmp ah, 0
+ja out_of_range1
 mov dl, al
 jmp print
 
@@ -138,6 +150,14 @@ invalid_input:
 mov dx, offset invalid_input_msg
 mov ah, 9h
 int 21h
+jmp exit_app
+
+; out of range message
+out_of_range:
+mov dx, offset out_of_range_msg
+mov ah, 9h
+int 21h
+jmp exit_app
 
 exit_app:
 mov ah, 4ch
